@@ -1,0 +1,155 @@
+<!DOCTYPE HTML>
+<!--
+	Solid State by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Generic - Solid State by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Brent Matthys</a></h1>
+						<nav>
+							<a href="https://github.com/brmatthy/mao-ai/tree/main" class="button "><span class="label icon brands fa-github"></span> View on Github</a>
+						</nav>
+					</header>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>Mao AI</h2>
+								<p>Mao is a card game where it is not allowed to talk about the rules. Together with a friend I created an
+									AI that learns the rules by playing the game.</p>
+							</div>
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<h3 class="major">The game</h3>
+
+									<p><span class="image right"><img src="images/robot_cards.jpg" alt="" /></span>In the card game Mao one is not allowed to talk about the rules, this however does not mean that there are no rules. New players are 
+										at a disadvantage since they don't know the rules, and they will have to discover them while playing. Veteran players already know 
+										the rules and they will punish any player that makes a mistake.</p>
+
+									<p>
+									</p>
+									<p>Our idea was to create an ai, that knows no rules at first, just like a new player, but discovers the game while playing.
+										We were interested to see how the ai would handle all the obstacles of playing the card game Mao.</p>
+									<p>
+										The <a href="https://github.com/brmatthy/mao-ai">github repo</a> contains our implementation of the ai. Apart from the implementation, 
+										the <a href="https://github.com/brmatthy/mao-ai/blob/main/Mao_ai.pdf">project report</a> is also present in the repo. Below you'll find a more
+										compact version of the report.
+									</p>
+
+									<h3 class="major">The AI</h3>
+
+									<p><span class="image left"><img src="images/3_robots.jpg" alt="" /></span>
+									When trying to learn the rules of the card game Mao, there are 3 things you need to figure out. First of all you need to know
+										when it is your turn to play. Secondly you need to know which cards can be laid when. The last part may not be obvious at first,
+										but as soon as you start playing Mao, you'll realize that you sometimes have to perform an action when it is your turn. This will be the 
+										last thing that you have to figure out when playing mao.
+									</p>
+									<p>Instead of creating 1 big ai, we created 3 smaller ai's each with their own dedicated purpose. At the end we combined them into one.</p>
+									<h4>Move AI</h4>
+									<p>As a human this is usually the most easy part of the game. You sit in a circle, and you can follow who has already played. It could however happen
+									that a special card is played like in uno, to make the direction turn, or something similar. To solve this problem we used 
+									<a href="https://en.wikipedia.org/wiki/Q-learning">Q-learning</a> with the two last players in combination with the top card as state,
+									and the wether or not to play as action. By using the two previous players we have an idea of the <em>direction</em> of who's at turn.
+									This resulted in a great ai, that was almost optimal after only a few games.</p>
+
+									<h4>Play AI</h4>
+									<p>Learning what cards to play when can be a bit more complicated. We tried to use some clever mechanisms get an optimal result.
+										See the <a href="https://github.com/brmatthy/mao-ai/blob/main/Mao_ai.pdf">full report</a> for more details.
+									</p>
+									<p>For this ai we also used Q-learning. This time however we updated more in the Q-table than only the value at our state-action pair.
+										When playing card games there is often a link between the cards symbols and also a link between the cards numbers. Instead of only
+										updating our state-action pair, we update all the state action pairs that have the same number or symbol on the action card.
+										Since the Q-table is rather large (52 cards x 52 cards) it takes the ai some time to become optimal.
+									</p>
+									<p>
+
+									</p>
+
+									<h4>Act AI</h4>
+									<p>The final ai has the task of knowing what actions to perform when at turn. This might just be the most complex part of the game, since
+										rules about this may be very simple or, very complex. To tackle this problem we use two different approaches.
+									</p>
+									<p>
+										Once again we turned to Q-learning. Taking the n-last played cards as all the possible states. This resulted in a great ai that made very
+										few mistakes. When making n larger however it took the ai much longer to reach this state. This is due to the fact the amount of states is exponential 
+										in the amount of cards looked at.
+									</p>
+									<div class="table-wrapper">
+										<table class="alt">
+											<thead>
+												<tr>
+													<th>Amount of cards to take into consideration </th>
+													<th>Amount of states</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>1</td>
+													<td>53</td>
+												</tr>
+												<tr>
+													<td>2</td>
+													<td>53<sup>2</sup> = 2809</td>
+												</tr>
+												<tr>
+													<td>3</td>
+													<td>53<sup>3</sup> = 148877</td>
+												</tr>
+												<tr>
+													<td>4</td>
+													<td>53<sup>4</sup> = 7890481</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<p>This makes it unfeasible to use Q-learning when trying to learn complex action rules.</p>
+									<p>To solve tackle this issue we looked at <a href="https://en.wikipedia.org/wiki/Neural_network">neural networks</a>
+									Neural networks have the advantage that they are able solve problems for any given input size. They tend to be slow,
+									but we went with them anyway since for a large n they would still easily outperform Q-learning.
+									</p>
+								</div>
+							</div>
+
+					</section>
+				<!-- Footer -->
+				<section id="footer">
+					<div class="inner">
+						<ul class="copyright">
+							<li>&copy; Brent Matthys </li>
+							<li><a href="https://www.linkedin.com/in/brent-matthys-7461b42a0/" class="icon brands fa-linkedin"><span class="label"></span> Linkedin</a></li>
+							<li><a href="https://github.com/brmatthy" class="icon brands fa-github"><span class="label"></span> Github</a></li>
+						</ul>
+					</div>
+				</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
